@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Summit Digital | SEO & Lead Generation for Construction Businesses</title>
+<meta name="description" content="Summit Digital helps construction businesses strengthen their online presence with SEO, website development and targeted lead generation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#19324f;--teal:#226c89;--cyan:#31adcd;--bg:#f7f8fa;--surface:#fff;--text:#19324f;--muted:#566579;--line:#e1e6ec;--hero:#eef3f8;--hero-text:#19324f;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px;height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+h1,h2,h3{font-family:Sora,Inter,system-ui,sans-serif;line-height:1.15;margin:0}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.15rem Sora,sans-serif}
+.brand svg{width:38px;height:34px}
+.brand b{color:var(--cyan);font-weight:700}
+nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;align-items:center}
+nav a{font-weight:500;font-size:.95rem;color:var(--muted);transition:color .2s}
+nav a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:10px;font-weight:600;font-size:.95rem;border:0;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.btn-primary{background:var(--cyan);color:#06263a}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -8px rgba(49,173,205,.7)}
+.btn-ghost{border:1.5px solid var(--navy);color:var(--navy);background:transparent}
+.btn-ghost:hover{background:rgba(25,50,79,.07)}
+.menu{display:none;background:none;border:0;color:var(--text);font-size:1.6rem;cursor:pointer}
+.hero{background:var(--hero);color:var(--hero-text);position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 80px,rgba(49,173,205,.05) 80px 82px)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-top:96px;padding-bottom:104px}
+.eyebrow{display:inline-block;font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:18px}
+.hero h1{font-size:clamp(2.2rem,5vw,3.7rem);font-weight:700;letter-spacing:-.02em}
+.hero h1 span{color:var(--cyan)}
+.hero p{color:var(--muted);font-size:1.1rem;max-width:560px;margin:22px 0 34px}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero-art{display:flex;justify-content:center}
+.hero-art svg{width:min(100%,380px);height:auto;filter:drop-shadow(0 24px 30px rgba(25,50,79,.18))}
+.bar{transform-origin:bottom;animation:grow 1s cubic-bezier(.2,.8,.2,1) both}
+.bar:nth-child(2){animation-delay:.15s}.bar:nth-child(3){animation-delay:.3s}
+@keyframes grow{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+.hero-art .p{fill:#19324f}
+section{padding:92px 0}
+.head{max-width:640px;margin-bottom:48px}
+.head h2{font-size:clamp(1.8rem,3.6vw,2.6rem);margin-top:10px}
+.head p{color:var(--muted);margin:14px 0 0}
+.tag{color:var(--teal);font-weight:600;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:30px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-6px);box-shadow:0 22px 40px -24px rgba(25,50,79,.45);border-color:var(--cyan)}
+.ico{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--cyan),var(--teal));display:grid;place-items:center;margin-bottom:20px}
+.ico svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:1.15rem;margin-bottom:10px}
+.card p{margin:0;color:var(--muted);font-size:.96rem}
+.alt{background:var(--surface);border-block:1px solid var(--line)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:s}
+.step{position:relative;padding-top:20px;border-top:3px solid var(--line)}
+.step::before{counter-increment:s;content:"0" counter(s);font:700 2rem Sora,sans-serif;color:var(--cyan);display:block;margin-bottom:8px}
+.step{border-image:linear-gradient(90deg,var(--cyan),var(--line)) 1}
+.step h3{font-size:1.05rem;margin-bottom:8px}
+.step p{margin:0;color:var(--muted);font-size:.94rem}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.list{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:16px}
+.list li{display:flex;gap:14px;align-items:flex-start}
+.list svg{flex:none;width:22px;height:22px;margin-top:3px;stroke:var(--cyan);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.list strong{display:block}
+.list span{color:var(--muted);font-size:.94rem}
+.panel{background:linear-gradient(160deg,var(--navy),#0f2238);color:#fff;border-radius:20px;padding:40px}
+.panel h3{font-size:1.4rem;margin-bottom:22px}
+.chart{display:flex;align-items:flex-end;gap:14px;height:190px}
+.chart i{flex:1;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--cyan),var(--teal));height:0;transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
+.panel small{display:block;margin-top:14px;color:#9fb6cc}
+.contact{background:var(--hero);color:var(--text)}
+.contact .head p{color:var(--muted)}
+form{display:grid;gap:16px;background:var(--surface);color:var(--text);padding:34px;border-radius:18px;border:1px solid var(--line);box-shadow:0 24px 48px -30px rgba(25,50,79,.4)}
+form .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{font-size:.85rem;font-weight:600;display:block;margin-bottom:6px}
+input,select,textarea{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--cyan);outline-offset:1px;border-color:transparent}
+textarea{min-height:110px;resize:vertical}
+.err{color:#d6455d;font-size:.8rem;min-height:1em;margin-top:4px}
+#ok{display:none;background:rgba(49,173,205,.14);border:1px solid var(--cyan);padding:14px;border-radius:10px;font-weight:500}
+.cgrid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+.info{display:grid;gap:18px;margin-top:8px}
+.info a{display:flex;gap:12px;align-items:center;color:var(--text)}
+.info a:hover{color:var(--teal)}
+.info svg{width:20px;height:20px;stroke:var(--cyan);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+footer{background:var(--surface);color:var(--muted);border-top:1px solid var(--line);padding:30px 0;font-size:.88rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+@media (max-width:900px){
+.hero .wrap,.split,.cgrid{grid-template-columns:1fr}
+.hero-art{order:-1}.hero-art svg{width:220px}
+.grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}
+.menu{display:block}
+nav ul{display:none;position:absolute;top:68px;left:0;right:0;flex-direction:column;background:var(--bg);padding:20px 24px;gap:18px;border-bottom:1px solid var(--line)}
+nav ul.open{display:flex}
+section{padding:68px 0}
+}
+@media (max-width:600px){.grid,.steps,form .row{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap nav">
+<a href="#top" class="brand" aria-label="Summit Digital home">
+<svg viewBox="400 250 1250 1140" aria-hidden="true"><polygon fill="#31adcd" points="424,1097 623,955 623,1225 424,1366"/><polygon fill="#226c89" points="709,893 908,752 908,1225 709,1366"/><polygon fill="var(--navy)" points="994,690 1193,549 1193,1225 994,1366"/><polygon fill="var(--navy)" points="994,341 1091,272 1295,272 1623,506 1623,919 1280,1163 1280,922 1574,712 1193,441 994,583"/></svg>
+<span>Summit <b>Digital</b></span>
+</a>
+<nav aria-label="Main">
+<button class="menu" id="menu" aria-label="Toggle menu">☰</button>
+<ul id="links">
+<li><a href="#services">Services</a></li>
+<li><a href="#process">Process</a></li>
+<li><a href="#why">Why Us</a></li>
+<li><a href="#contact" class="btn btn-primary">Get a Free Audit</a></li>
+</ul>
+</nav>
+</div>
+</header>
+
+<main id="top">
+<div class="hero">
+<div class="wrap">
+<div>
+<span class="eyebrow">Digital growth for construction</span>
+<h1>Turn your website into your <span>best business developer.</span></h1>
+<p>We help construction businesses strengthen their online presence, showcase their expertise and secure more high-quality enquiries through proven digital strategies.</p>
+<div class="cta">
+<a href="#contact" class="btn btn-primary">Book a Free Audit →</a>
+<a href="#services" class="btn btn-ghost">Explore Services</a>
+</div>
+</div>
+<div class="hero-art" aria-hidden="true">
+<svg viewBox="400 250 1250 1140"><g><polygon class="bar" fill="#31adcd" points="424,1097 623,955 623,1225 424,1366"/><polygon class="bar" fill="#226c89" points="709,893 908,752 908,1225 709,1366"/><polygon class="bar" fill="#19324f" points="994,690 1193,549 1193,1225 994,1366"/><polygon class="bar p" points="994,341 1091,272 1295,272 1623,506 1623,919 1280,1163 1280,922 1574,712 1193,441 994,583"/></g></svg>
+</div>
+</div>
+</div>
+
+<section id="services">
+<div class="wrap">
+<div class="head reveal"><span class="tag">What we do</span><h2>Tailored digital solutions for construction firms</h2><p>Everything your business needs to be found, trusted and contacted online.</p></div>
+<div class="grid">
+<article class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div><h3>SEO &amp; Search Visibility</h3><p>Rank for the searches your ideal clients make, from “commercial builder near me” to project-specific terms.</p></article>
+<article class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div><h3>Professional Website Development</h3><p>Fast, modern, mobile-first websites that present your projects and credentials with authority.</p></article>
+<article class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 9-12h-7z"/></svg></div><h3>Website Optimization</h3><p>Speed, structure and conversion improvements that turn existing traffic into real enquiries.</p></article>
+<article class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div><h3>Strategic Digital Marketing</h3><p>Clear, data-led campaigns that build brand awareness across the channels that matter to your market.</p></article>
+<article class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div><h3>Targeted Lead Generation</h3><p>Reach decision-makers actively looking for construction partners and fill your pipeline with qualified leads.</p></article>
+<article class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Reporting &amp; Insights</h3><p>Plain-language reports showing rankings, traffic and enquiries, so you always know what’s working.</p></article>
+</div>
+</div>
+</section>
+
+<section id="process" class="alt">
+<div class="wrap">
+<div class="head reveal"><span class="tag">How we work</span><h2>A simple, transparent path to more enquiries</h2></div>
+<div class="steps">
+<div class="step reveal"><h3>Audit</h3><p>We review your website, search visibility and competitors to find the biggest opportunities.</p></div>
+<div class="step reveal"><h3>Strategy</h3><p>A focused plan matched to your services, locations and ideal project types.</p></div>
+<div class="step reveal"><h3>Execute</h3><p>We build, optimize and launch: content, technical SEO, site improvements and campaigns.</p></div>
+<div class="step reveal"><h3>Grow</h3><p>We track results, report clearly and keep refining to improve lead quality over time.</p></div>
+</div>
+</div>
+</section>
+
+<section id="why">
+<div class="wrap split">
+<div class="reveal">
+<span class="tag">Why Summit Digital</span>
+<h2 style="font-size:clamp(1.8rem,3.6vw,2.6rem);margin-top:10px">Built around how construction businesses win work</h2>
+<ul class="list">
+<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><div><strong>Construction-focused</strong><span>We understand long sales cycles, project portfolios and the importance of trust.</span></div></li>
+<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><div><strong>Quality over quantity</strong><span>We aim for enquiries from serious clients, not just more traffic.</span></div></li>
+<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><div><strong>Clear communication</strong><span>No jargon. You’ll always know what we’re doing and why.</span></div></li>
+</ul>
+</div>
+<div class="panel reveal">
+<h3>Climb higher, step by step</h3>
+<div class="chart" id="chart" aria-hidden="true"><i data-h="28"></i><i data-h="46"></i><i data-h="64"></i><i data-h="82"></i><i data-h="100"></i></div>
+<small>Illustrative growth path: visibility → traffic → enquiries.</small>
+</div>
+</div>
+</section>
+
+<section id="contact" class="contact">
+<div class="wrap cgrid">
+<div class="reveal">
+<span class="tag">Get in touch</span>
+<div class="head" style="margin-bottom:24px"><h2>Let’s grow your construction business online</h2><p>Request a free website and SEO audit. We’ll respond within one business day.</p></div>
+<div class="info">
+<a href="mailto:hello@summitdigital.com"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>hello@summitdigital.com</a>
+<a href="https://www.linkedin.com/company/summit-digital" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5M12 13a2.5 2.5 0 0 1 5 0v3"/></svg>Follow us on LinkedIn</a>
+</div>
+</div>
+<form id="form" novalidate class="reveal">
+<div class="row">
+<div><label for="name">Name</label><input id="name" required autocomplete="name"><div class="err"></div></div>
+<div><label for="email">Email</label><input id="email" type="email" required autocomplete="email"><div class="err"></div></div>
+</div>
+<div class="row">
+<div><label for="company">Company</label><input id="company" autocomplete="organization"></div>
+<div><label for="service">Interested in</label><select id="service"><option>SEO &amp; Search Visibility</option><option>Website Development</option><option>Website Optimization</option><option>Digital Marketing</option><option>Lead Generation</option></select></div>
+</div>
+<div><label for="msg">Message</label><textarea id="msg" required></textarea><div class="err"></div></div>
+<button class="btn btn-primary" type="submit">Request Free Audit →</button>
+<div id="ok" role="status">Thank you! Your email app will open with your message ready to send.</div>
+</form>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="wrap"><span>© <span id="yr"></span> Summit Digital. All rights reserved.</span><span>SEO · Websites · Lead Generation for Construction</span></div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent=new Date().getFullYear();
+const links=document.getElementById('links');
+document.getElementById('menu').addEventListener('click',()=>links.classList.toggle('open'));
+links.addEventListener('click',e=>{if(e.target.tagName==='A')links.classList.remove('open')});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+if(e.target.classList.contains('panel'))document.querySelectorAll('#chart i').forEach(b=>b.style.height=b.dataset.h+'%');
+io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.getElementById('form').addEventListener('submit',e=>{
+e.preventDefault();let ok=true;
+[['name','Please enter your name'],['email','Please enter a valid email'],['msg','Please enter a message']].forEach(([id,m])=>{
+const f=document.getElementById(id),err=f.parentElement.querySelector('.err');
+const bad=!f.value.trim()||(id==='email'&&!/^\S+@\S+\.\S+$/.test(f.value));
+err.textContent=bad?m:'';if(bad)ok=false});
+if(!ok)return;
+const v=id=>document.getElementById(id).value;
+const body=`Name: ${v('name')}\nCompany: ${v('company')}\nService: ${v('service')}\n\n${v('msg')}`;
+document.getElementById('ok').style.display='block';
+window.location.href='mailto:hello@summitdigital.com?subject='+encodeURIComponent('Free audit request: '+v('company'))+'&body='+encodeURIComponent(body);
+});
+</script>
+</body>
+</html>
