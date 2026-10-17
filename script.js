@@ -86,13 +86,13 @@ if ("IntersectionObserver" in window) {
   showGrowthChart();
 }
 
-// 4. Contact form validation and email draft creation.
-// This front-end form does not save messages to a database or send them itself.
+// 4. Contact form validation and email delivery through FormSubmit.
+// FormSubmit requires the recipient to confirm/activate the first submission.
 const contactForm = document.getElementById("contact-form");
 const formStatus = document.getElementById("form-status");
 
 if (contactForm && formStatus) {
-  const recipientEmail = "hello@summitdigital.com";
+  const recipientEmail = "summitdigital.contact@gmail.com";
 
   // Return true when the field is valid, otherwise display its error message.
   function validateField(fieldId, errorMessage, validator) {
@@ -104,11 +104,10 @@ if (contactForm && formStatus) {
     const isValid = validator(field.value.trim());
     errorElement.textContent = isValid ? "" : errorMessage;
     field.setAttribute("aria-invalid", String(!isValid));
-
     return isValid;
   }
 
-  // Remove a field's error message as soon as the visitor corrects its value.
+  // Clear field errors as the visitor edits their information.
   ["name", "email", "message"].forEach((fieldId) => {
     const field = document.getElementById(fieldId);
     if (!field) return;
@@ -120,63 +119,59 @@ if (contactForm && formStatus) {
     });
   });
 
-  contactForm.addEventListener("submit", (event) => {
+  contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     formStatus.hidden = true;
 
     const isNameValid = validateField(
-      "name",
-      "Please enter your name.",
-      (value) => value.length > 0
+      "name", "Please enter your name.", (value) => value.length > 0
     );
-
     const isEmailValid = validateField(
-      "email",
-      "Please enter a valid email address.",
+      "email", "Please enter a valid email address.",
       (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
     );
-
     const isMessageValid = validateField(
-      "message",
-      "Please enter a message.",
-      (value) => value.length > 0
+      "message", "Please enter a message.", (value) => value.length > 0
     );
 
-    // Focus the first invalid field to help the visitor fix the issue.
     if (!isNameValid || !isEmailValid || !isMessageValid) {
-      const firstInvalidField = contactForm.querySelector('[aria-invalid="true"]');
-      firstInvalidField?.focus();
+      contactForm.querySelector('[aria-invalid="true"]')?.focus();
       return;
     }
 
-    const formData = new FormData(contactForm);
-    const name = String(formData.get("name") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const company = String(formData.get("company") || "").trim();
-    const service = String(formData.get("service") || "").trim();
-    const message = String(formData.get("message") || "").trim();
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton?.innerHTML;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending request...";
+    }
 
-    const subject = company
-      ? `Free audit request: ${company}`
-      : `Free audit request from ${name}`;
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(contactForm))),
+      });
+      const result = await response.json();
 
-    const emailBody = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Company: ${company || "Not provided"}`,
-      `Service: ${service}`,
-      "",
-      "Message:",
-      message,
-    ].join("\n");
+      if (!response.ok || result.success !== "true" && result.success !== true) {
+        throw new Error(result.message || "The form service could not accept this request.");
+      }
 
-    // Open the visitor's configured email application with fields pre-filled.
-    const mailtoUrl =
-      `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}` +
-      `&body=${encodeURIComponent(emailBody)}`;
-
-    formStatus.hidden = false;
-    formStatus.focus();
-    window.location.href = mailtoUrl;
+      contactForm.reset();
+      formStatus.textContent = "Thank you! Your audit request has been submitted. We’ll get back to you soon.";
+      formStatus.hidden = false;
+      formStatus.focus();
+    } catch (error) {
+      formStatus.textContent = "We couldn’t submit your request. Please email summitdigital.contact@gmail.com directly or try again.";
+      formStatus.hidden = false;
+      formStatus.focus();
+      console.error("Contact form submission failed:", error);
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText || 'Request Free Audit <span aria-hidden="true">→</span>';
+      }
+    }
   });
 }
