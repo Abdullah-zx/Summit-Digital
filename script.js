@@ -86,15 +86,16 @@ if ("IntersectionObserver" in window) {
   showGrowthChart();
 }
 
-// 4. Contact form validation and email delivery through FormSubmit.
-// FormSubmit requires the recipient to confirm/activate the first submission.
+// 4. Contact form validation and AJAX email submission through FormSubmit.
+// URL-encoded data is used instead of JSON to avoid triggering a CORS preflight
+// request in browsers. FormSubmit still needs to accept the request and return
+// the appropriate CORS headers for the browser to expose its response.
 const contactForm = document.getElementById("contact-form");
 const formStatus = document.getElementById("form-status");
 
 if (contactForm && formStatus) {
   const recipientEmail = "summitdigital.contact@gmail.com";
 
-  // Return true when the field is valid, otherwise display its error message.
   function validateField(fieldId, errorMessage, validator) {
     const field = document.getElementById(fieldId);
     const errorElement = document.getElementById(`${fieldId}-error`);
@@ -107,7 +108,7 @@ if (contactForm && formStatus) {
     return isValid;
   }
 
-  // Clear field errors as the visitor edits their information.
+  // Clear field errors while the visitor edits the form.
   ["name", "email", "message"].forEach((fieldId) => {
     const field = document.getElementById(fieldId);
     if (!field) return;
@@ -116,6 +117,7 @@ if (contactForm && formStatus) {
       const errorElement = document.getElementById(`${fieldId}-error`);
       if (errorElement) errorElement.textContent = "";
       field.setAttribute("aria-invalid", "false");
+      formStatus.hidden = true;
     });
   });
 
@@ -140,22 +142,35 @@ if (contactForm && formStatus) {
     }
 
     const submitButton = contactForm.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton?.innerHTML;
+    const originalButtonHTML = submitButton?.innerHTML;
+
     if (submitButton) {
       submitButton.disabled = true;
       submitButton.textContent = "Sending request...";
     }
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(contactForm))),
+      const formData = new URLSearchParams();
+      new FormData(contactForm).forEach((value, key) => {
+        formData.append(key, value);
       });
+
+      const response = await fetch(
+        `https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+            "Accept": "application/json"
+          },
+          body: formData.toString()
+        }
+      );
+
       const result = await response.json();
 
       if (!response.ok || result.success !== "true" && result.success !== true) {
-        throw new Error(result.message || "The form service could not accept this request.");
+        throw new Error(result.message || `Form service returned status ${response.status}.`);
       }
 
       contactForm.reset();
@@ -170,7 +185,7 @@ if (contactForm && formStatus) {
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.innerHTML = originalButtonText || 'Request Free Audit <span aria-hidden="true">→</span>';
+        submitButton.innerHTML = originalButtonHTML || 'Request Free Audit <span aria-hidden="true">→</span>';
       }
     }
   });
