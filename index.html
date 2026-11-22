@@ -164,7 +164,7 @@
       </div>
     </section>
 
-    <!-- Contact section. Email link opens a Gmail compose window; form uses FormSubmit. -->
+    <!-- Contact section. Email link opens Gmail; form uses the Summit Digital Google Apps Script backend. -->
     <section class="section contact-section" id="contact" aria-labelledby="contact-title">
       <div class="container contact-layout">
         <div class="contact-copy reveal">
@@ -186,11 +186,11 @@
           </div>
         </div>
 
-        <form class="contact-form reveal" id="contact-form" action="https://formsubmit.co/summitdigital.contact@gmail.com" method="POST" novalidate>
-          <input type="hidden" name="_subject" value="New Free Audit Request | Summit Digital">
-          <input type="hidden" name="_next" value="https://abdullah-zx.github.io/Summit-Digital/?submitted=true#contact">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
+        <form class="contact-form reveal" id="contact-form" novalidate>
+          <div class="form-field" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;">
+            <label for="website">Leave this field empty</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
           <div class="form-row">
             <div class="form-field">
               <label for="name">Name</label>
@@ -229,7 +229,7 @@
 
           <button class="button button-primary submit-button" type="submit">Request Free Audit <span aria-hidden="true">→</span></button>
           <p class="form-status" id="form-status" role="status" tabindex="-1" hidden></p>
-          <p class="form-note">Your details will be sent to our email. First-time activation is required for delivery.</p>
+          <p class="form-note">Your details are sent securely through our Google-powered contact system.</p>
         </form>
       </div>
     </section>

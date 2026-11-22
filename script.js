@@ -1,148 +1,159 @@
-/* ==========================================================
-   Summit Digital website interactions
-   Keep interactive behavior in this file, separate from CSS.
-   ========================================================== */
+/* Summit Digital website interactions and contact form. */
+"use strict";
 
-// Add a class immediately so page content remains visible if scripts run.
-document.documentElement.classList.remove("no-js");
+// Paste the deployed Google Apps Script Web App URL here before publishing.
+const CONTACT_API_URL = "https://script.google.com/macros/s/AKfycbxwraUmrYNRmvox6RMeQ4fNoz33dqrglP5IkH5D8OxkzI56NzuE9X3-2u--pa4LkBw3/exec";
 
-// 1. Keep the footer year current automatically.
+// Footer year.
 const currentYear = document.getElementById("current-year");
-if (currentYear) {
-  currentYear.textContent = new Date().getFullYear();
-}
+if (currentYear) currentYear.textContent = new Date().getFullYear();
 
-// 2. Mobile navigation: open/close the menu and update accessibility state.
+// Mobile navigation.
 const menuToggle = document.getElementById("menu-toggle");
 const navLinks = document.getElementById("nav-links");
 
+function closeMenu() {
+  if (!menuToggle || !navLinks) return;
+  navLinks.classList.remove("is-open");
+  menuToggle.setAttribute("aria-expanded", "false");
+  menuToggle.setAttribute("aria-label", "Open navigation menu");
+}
+
 if (menuToggle && navLinks) {
   menuToggle.addEventListener("click", () => {
-    const isOpen = navLinks.classList.toggle("is-open");
-
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-    menuToggle.setAttribute(
-      "aria-label",
-      isOpen ? "Close navigation menu" : "Open navigation menu"
-    );
+    const open = navLinks.classList.toggle("is-open");
+    menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
   });
-
-  // Close the mobile menu after a visitor selects a navigation link.
   navLinks.addEventListener("click", (event) => {
-    const clickedLink = event.target.closest("a");
-
-    if (clickedLink) {
-      navLinks.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.setAttribute("aria-label", "Open navigation menu");
-    }
+    if (event.target.closest("a")) closeMenu();
   });
-
-  // Close the menu with Escape for keyboard users.
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      navLinks.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.setAttribute("aria-label", "Open navigation menu");
-    }
+    if (event.key === "Escape") closeMenu();
   });
 }
 
-// 3. Reveal section content as it enters the viewport.
-// If IntersectionObserver is unsupported, reveal everything immediately.
+// Scroll reveal and decorative growth chart.
 const revealElements = document.querySelectorAll(".reveal");
 const growthChart = document.getElementById("growth-chart");
-
 function showGrowthChart() {
   if (!growthChart) return;
-
   growthChart.querySelectorAll("i[data-height]").forEach((bar) => {
     bar.style.height = `${bar.dataset.height}%`;
   });
 }
 
 if ("IntersectionObserver" in window) {
-  const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        entry.target.classList.add("is-visible");
-
-        // Animate the decorative bar chart only when its panel is in view.
-        if (entry.target.classList.contains("growth-panel")) {
-          showGrowthChart();
-        }
-
-        observer.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.15 }
-  );
-
-  revealElements.forEach((element) => revealObserver.observe(element));
+  const observer = new IntersectionObserver((entries, activeObserver) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      if (entry.target.classList.contains("growth-panel")) showGrowthChart();
+      activeObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.15 });
+  revealElements.forEach((element) => observer.observe(element));
 } else {
   revealElements.forEach((element) => element.classList.add("is-visible"));
   showGrowthChart();
 }
 
-// 4. Contact form validation and AJAX email submission through FormSubmit.
-// URL-encoded data is used instead of JSON to avoid triggering a CORS preflight
-// request in browsers. FormSubmit still needs to accept the request and return
-// the appropriate CORS headers for the browser to expose its response.
+// JSONP contact submission. This avoids browser CORS preflight requests.
 const contactForm = document.getElementById("contact-form");
 const formStatus = document.getElementById("form-status");
 
 if (contactForm && formStatus) {
-  const recipientEmail = "summitdigital.contact@gmail.com";
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+  const originalButtonHTML = submitButton ? submitButton.innerHTML : "";
+  const fieldRules = {
+    name: { message: "Please enter your name.", test: (v) => v.length >= 2 },
+    email: { message: "Please enter a valid email address.", test: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+    message: { message: "Please enter a message.", test: (v) => v.length >= 5 }
+  };
 
-  function validateField(fieldId, errorMessage, validator) {
-    const field = document.getElementById(fieldId);
-    const errorElement = document.getElementById(`${fieldId}-error`);
-
-    if (!field || !errorElement) return true;
-
-    const isValid = validator(field.value.trim());
-    errorElement.textContent = isValid ? "" : errorMessage;
-    field.setAttribute("aria-invalid", String(!isValid));
-    return isValid;
+  function setStatus(message, isError) {
+    formStatus.textContent = message;
+    formStatus.hidden = false;
+    formStatus.classList.toggle("is-error", Boolean(isError));
+    formStatus.classList.toggle("is-success", !isError);
+    formStatus.focus();
   }
 
-  // Clear field errors while the visitor edits the form.
-  ["name", "email", "message"].forEach((fieldId) => {
-    const field = document.getElementById(fieldId);
-    if (!field) return;
+  function validate() {
+    let valid = true;
+    Object.entries(fieldRules).forEach(([id, rule]) => {
+      const field = document.getElementById(id);
+      const error = document.getElementById(`${id}-error`);
+      if (!field) return;
+      const ok = rule.test(field.value.trim());
+      if (error) error.textContent = ok ? "" : rule.message;
+      field.setAttribute("aria-invalid", String(!ok));
+      if (!ok) valid = false;
+    });
+    if (!valid) contactForm.querySelector('[aria-invalid="true"]')?.focus();
+    return valid;
+  }
 
+  Object.keys(fieldRules).forEach((id) => {
+    const field = document.getElementById(id);
+    if (!field) return;
     field.addEventListener("input", () => {
-      const errorElement = document.getElementById(`${fieldId}-error`);
-      if (errorElement) errorElement.textContent = "";
-      field.setAttribute("aria-invalid", "false");
-      formStatus.hidden = true;
+      const rule = fieldRules[id];
+      const error = document.getElementById(`${id}-error`);
+      const ok = rule.test(field.value.trim());
+      if (error && ok) error.textContent = "";
+      field.setAttribute("aria-invalid", String(!ok));
     });
   });
+
+  function sendJsonp(payload) {
+    return new Promise((resolve, reject) => {
+      if (!CONTACT_API_URL.startsWith("https://script.google.com/macros/s/")) {
+        reject(new Error("Contact form setup is incomplete. The website owner must add the deployed Apps Script URL in script.js."));
+        return;
+      }
+
+      const callbackName = `summitContactCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      const script = document.createElement("script");
+      const params = new URLSearchParams({ ...payload, callback: callbackName });
+      let finished = false;
+
+      const cleanup = () => {
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+        window.clearTimeout(timeoutId);
+      };
+      const finish = (fn, value) => {
+        if (finished) return;
+        finished = true;
+        cleanup();
+        fn(value);
+      };
+
+      window[callbackName] = (result) => finish(resolve, result);
+      script.onerror = () => finish(reject, new Error("Could not reach Google Apps Script. Check its deployment URL and access settings."));
+      const timeoutId = window.setTimeout(() => {
+        finish(reject, new Error("The request timed out. Please try again."));
+      }, 20000);
+      script.src = `${CONTACT_API_URL}?${params.toString()}`;
+      document.head.appendChild(script);
+    });
+  }
 
   contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     formStatus.hidden = true;
+    if (!validate()) return;
 
-    const isNameValid = validateField(
-      "name", "Please enter your name.", (value) => value.length > 0
-    );
-    const isEmailValid = validateField(
-      "email", "Please enter a valid email address.",
-      (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-    );
-    const isMessageValid = validateField(
-      "message", "Please enter a message.", (value) => value.length > 0
-    );
-
-    if (!isNameValid || !isEmailValid || !isMessageValid) {
-      contactForm.querySelector('[aria-invalid="true"]')?.focus();
-      return;
-    }
-
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-    const originalButtonHTML = submitButton?.innerHTML;
+    const data = new FormData(contactForm);
+    const payload = {
+      name: String(data.get("name") || "").trim(),
+      email: String(data.get("email") || "").trim(),
+      company: String(data.get("company") || "").trim(),
+      service: String(data.get("service") || "").trim(),
+      message: String(data.get("message") || "").trim(),
+      website: String(data.get("website") || "").trim()
+    };
 
     if (submitButton) {
       submitButton.disabled = true;
@@ -150,42 +161,23 @@ if (contactForm && formStatus) {
     }
 
     try {
-      const formData = new URLSearchParams();
-      new FormData(contactForm).forEach((value, key) => {
-        formData.append(key, value);
-      });
-
-      const response = await fetch(
-        `https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-            "Accept": "application/json"
-          },
-          body: formData.toString()
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || result.success !== "true" && result.success !== true) {
-        throw new Error(result.message || `Form service returned status ${response.status}.`);
-      }
-
+      const result = await sendJsonp(payload);
+      if (!result || result.ok !== true) throw new Error(result?.message || "The email could not be sent.");
       contactForm.reset();
-      formStatus.textContent = "Thank you! Your audit request has been submitted. We’ll get back to you soon.";
-      formStatus.hidden = false;
-      formStatus.focus();
+      Object.keys(fieldRules).forEach((id) => {
+        const field = document.getElementById(id);
+        const error = document.getElementById(`${id}-error`);
+        if (field) field.setAttribute("aria-invalid", "false");
+        if (error) error.textContent = "";
+      });
+      setStatus("Thank you! Your request has been sent successfully. We will contact you soon.", false);
     } catch (error) {
-      formStatus.textContent = "We couldn’t submit your request. Please email summitdigital.contact@gmail.com directly or try again.";
-      formStatus.hidden = false;
-      formStatus.focus();
-      console.error("Contact form submission failed:", error);
+      console.error("Summit Digital form error:", error);
+      setStatus(error.message || "We could not send your request. Please email summitdigital.contact@gmail.com.", true);
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
-        submitButton.innerHTML = originalButtonHTML || 'Request Free Audit <span aria-hidden="true">→</span>';
+        submitButton.innerHTML = originalButtonHTML;
       }
     }
   });
